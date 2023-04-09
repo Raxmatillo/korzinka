@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-8 cart">
+                <div class="title">
+                    <div class="row">
+                        <div class="col">
+                            <h4><b>Korzinka</b></h4>
+                        </div>
+                        <div class="col align-self-center text-right text-muted">3 items</div>
+                    </div>
+                </div>
+                <div id="all-products">
+
+                </div>
+
+
+                <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+            </div>
+            <div class="col-md-4 summary">
+                <div>
+                    <h5><b>Summary</b></h5>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col" style="padding-left:0;">ITEMS 3</div>
+                    <div class="col text-right">&euro; 132.00</div>
+                </div>
+                <form>
+                    <p>SHIPPING</p>
+                    <select>
+                        <option class="text-muted">Standard-Delivery- &euro;5.00</option>
+                    </select>
+                    <p>GIVE CODE</p>
+                    <input id="code" placeholder="Enter your code">
+                </form>
+                <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                    <div class="col">TOTAL PRICE</div>
+                    <div class="col text-right">&euro; 137.00</div>
+                </div>
+                <button class="btn">CHECKOUT</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window
+            .fetch('https://fakestoreapi.com/products')
+            .then(result => result.json())
+            .then(products => {
+                console.log('products:', products)
+
+                sessionStorage.setItem('products', JSON.stringify(products))
+
+
+                renderProducts();
+                calcTotalItems();
+            });
+
+        // barcha tovarlarni chop etish
+        function renderProducts() {
+            let products = JSON.parse(sessionStorage.getItem('products'));
+            let allProductsElement = $('#all-products');
+            let html = "";
+            for (let product of products) {
+                html += `
+                    <div class="row border-bottom">
+                        <div class="row main align-items-center">
+                            <div class="col-2">
+                                <img class="img-fluid" src="${product.image}">
+                            </div>
+                            <div class="col">
+                                <div class="row text-muted">${product.category}</div>
+                                <div class="row">${product.title}</div>
+                            </div>
+                            <div class="col">
+                                <a href="#">-</a>
+                                <a href="#" class="border">1</a>
+                                <a href="#">+</a>
+                            </div>
+                            <div class="col">&euro; ${product.price} <span class="close">&#10005;</span></div>
+                        </div>
+                    </div >
+                    `;
+            }
+            allProductsElement.html(html);
+        }
+
+        // nechta tanlangani
+        function calcTotalItems() {
+            let totalItemsElement = $(",tital-items")
+            let products = JSON.parse(sessionStorage.getItem('products'));
+            totalItemsElement.html("${products.length} TOVAR")
+        }
+    </script>
+</body>
+
+</html>
